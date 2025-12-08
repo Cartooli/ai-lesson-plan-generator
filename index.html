@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered tool for generating comprehensive educational lesson plans">
+    <title>AI Lesson Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 AI Lesson Generator</h1>
+            <p class="subtitle">Create comprehensive lesson plans powered by AI</p>
+        </header>
+
+        <main>
+            <div class="form-container">
+                <form id="lessonForm">
+                    <div class="form-group">
+                        <label for="topic">Lesson Topic *</label>
+                        <input 
+                            type="text" 
+                            id="topic" 
+                            name="topic" 
+                            placeholder="e.g., Photosynthesis, World War II, Fractions"
+                            required
+                        >
+                        <small>Enter the main topic or subject for your lesson</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="grade">Grade Level</label>
+                            <select id="grade" name="grade">
+                                <option value="">Select grade</option>
+                                <option value="Kindergarten">Kindergarten</option>
+                                <option value="1st Grade">1st Grade</option>
+                                <option value="2nd Grade">2nd Grade</option>
+                                <option value="3rd Grade">3rd Grade</option>
+                                <option value="4th Grade">4th Grade</option>
+                                <option value="5th Grade">5th Grade</option>
+                                <option value="6th Grade">6th Grade</option>
+                                <option value="7th Grade">7th Grade</option>
+                                <option value="8th Grade">8th Grade</option>
+                                <option value="9th Grade">9th Grade</option>
+                                <option value="10th Grade">10th Grade</option>
+                                <option value="11th Grade">11th Grade</option>
+                                <option value="12th Grade">12th Grade</option>
+                                <option value="College">College</option>
+                                <option value="Adult Education">Adult Education</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input 
+                                type="text" 
+                                id="subject" 
+                                name="subject" 
+                                placeholder="e.g., Science, History, Math"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duration">Duration (minutes)</label>
+                            <input 
+                                type="number" 
+                                id="duration" 
+                                name="duration" 
+                                placeholder="e.g., 45"
+                                min="1"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="learningObjectives">Learning Objectives (Optional)</label>
+                        <textarea 
+                            id="learningObjectives" 
+                            name="learningObjectives" 
+                            rows="3"
+                            placeholder="Enter specific learning objectives, one per line..."
+                        ></textarea>
+                        <small>What should students learn? Leave blank for AI to generate.</small>
+                    </div>
+
+                    <button type="submit" id="generateBtn" class="btn-primary">
+                        <span class="btn-text">Generate Lesson Plan</span>
+                        <span class="btn-loader" style="display: none;">⏳</span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <div id="lessonPlanContainer" class="lesson-plan-container" style="display: none;">
+                <div class="lesson-plan-header">
+                    <h2>Generated Lesson Plan</h2>
+                    <button id="copyBtn" class="btn-secondary">Copy to Clipboard</button>
+                </div>
+                <div id="lessonPlan" class="lesson-plan"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by <a href="https://www.anthropic.com/" target="_blank" rel="noopener">Anthropic Claude</a></p>
+            <p>
+                <a href="https://github.com/your-username/ai-lesson-generator" target="_blank" rel="noopener">View on GitHub</a> | 
+                <a href="README.md" target="_blank">Documentation</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
+

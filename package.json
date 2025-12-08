@@ -1,0 +1,36 @@
+{
+  "name": "ai-lesson-generator",
+  "version": "1.0.0",
+  "description": "AI-powered tool for generating comprehensive educational lesson plans",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'",
+    "start": "vercel dev",
+    "lint": "echo 'No linter configured'"
+  },
+  "keywords": [
+    "education",
+    "ai",
+    "lesson-planning",
+    "edtech",
+    "anthropic",
+    "claude"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/ai-lesson-generator.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0"
+  },
+  "devDependencies": {
+    "vercel": "^34.0.0"
+  }
+}
+
