@@ -15,13 +15,11 @@ An AI-powered tool for generating comprehensive educational lesson plans using A
 
 ## Quick Start
 
-### Prerequisites
+### New to Coding?
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Anthropic API key ([Get one here](https://console.anthropic.com/))
+👉 **Start here**: [GETTING_STARTED.md](GETTING_STARTED.md) - Step-by-step guide for beginners
 
-### Installation
+### Already Familiar with Development?
 
 1. **Clone the repository**
    ```bash
@@ -48,6 +46,12 @@ An AI-powered tool for generating comprehensive educational lesson plans using A
    ```bash
    npm run dev
    ```
+
+### Prerequisites
+
+- Node.js (v18 or higher) - [Download here](https://nodejs.org/)
+- npm or yarn (comes with Node.js)
+- Anthropic API key - [Get one here](https://console.anthropic.com/)
 
 For detailed setup instructions, see [SETUP.md](SETUP.md).
 
@@ -99,10 +103,17 @@ See [SETUP.md](SETUP.md) for detailed deployment instructions.
 
 ## Documentation
 
+### For Beginners
+- **[GETTING_STARTED.md](GETTING_STARTED.md)** - ⭐ Start here! Step-by-step guide for non-developers
+- **[FAQ.md](FAQ.md)** - Frequently asked questions
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Common issues and solutions
+
+### For Developers
 - **[SETUP.md](SETUP.md)** - Detailed setup and installation guide
+- **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** - Deploy to Vercel, Netlify, etc.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture documentation
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing
 - **[SECURITY.md](SECURITY.md)** - Security policy and best practices
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture documentation
 
 ## Features in Detail
 
