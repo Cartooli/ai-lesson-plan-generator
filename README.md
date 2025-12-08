@@ -30,7 +30,7 @@ An AI-powered tool for generating comprehensive educational lesson plans using A
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/ai-lesson-generator.git
+   git clone https://github.com/Cartooli/ai-lesson-plan-generator.git
    cd ai-lesson-generator
    ```
 
@@ -224,8 +224,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - 📖 Check the [documentation](SETUP.md)
-- 🐛 [Report bugs](https://github.com/your-username/ai-lesson-generator/issues)
-- 💬 [Ask questions](https://github.com/your-username/ai-lesson-generator/discussions)
+- 🐛 [Report bugs](https://github.com/Cartooli/ai-lesson-plan-generator/issues)
+- 💬 [Ask questions](https://github.com/Cartooli/ai-lesson-plan-generator/discussions)
 - 🔒 [Security issues](SECURITY.md) - Please report privately
 
 ## Roadmap
