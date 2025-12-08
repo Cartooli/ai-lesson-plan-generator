@@ -7,9 +7,11 @@ An AI-powered tool for generating comprehensive educational lesson plans using A
 
 ## 🚀 Live Demo
 
-**Try it now**: [Live Demo](https://ai-lesson-plan-generator-dwellchecker.vercel.app)
+**Try it now**: [Live Demo](https://ai-lesson-plan-generator-dwellchecker.vercel.app) *(Check your Vercel dashboard for the actual URL)*
 
 > **Note**: The live demo uses shared API keys and may have rate limits. For unlimited usage, [deploy your own instance](DEPLOYMENT_GUIDE.md) with your own API key.
+>
+> **To find your deployment URL**: Go to your [Vercel project dashboard](https://vercel.com/dwellchecker/ai-lesson-plan-generator) → Check the "Domains" section or the latest deployment URL.
 
 ## Features
 
