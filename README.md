@@ -1,8 +1,15 @@
 # AI Lesson Generator
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Cartooli/ai-lesson-plan-generator)
 
 An AI-powered tool for generating comprehensive educational lesson plans using Anthropic's Claude API. This open-source project helps educators create structured, engaging lesson plans quickly and efficiently.
+
+## 🚀 Live Demo
+
+**Try it now**: [Live Demo](https://ai-lesson-plan-generator.vercel.app) *(Update with your actual Vercel URL)*
+
+> **Note**: The live demo uses shared API keys and may have rate limits. For unlimited usage, [deploy your own instance](DEPLOYMENT_GUIDE.md) with your own API key.
 
 ## Features
 
@@ -110,6 +117,7 @@ See [SETUP.md](SETUP.md) for detailed deployment instructions.
 
 ### For Developers
 - **[SETUP.md](SETUP.md)** - Detailed setup and installation guide
+- **[VERCEL_SETUP.md](VERCEL_SETUP.md)** - ⚡ Quick Vercel deployment guide
 - **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** - Deploy to Vercel, Netlify, etc.
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture documentation
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing
