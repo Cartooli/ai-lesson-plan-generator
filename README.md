@@ -229,6 +229,41 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] User authentication system
 - [ ] Lesson plan sharing
 
+## Extension Ideas
+
+Enhance your lesson plans with these powerful integrations:
+
+### 🎥 Convert Lesson Plans to Video
+
+Transform your generated lesson plans into engaging video content using [VideoGen](https://videogen.io/):
+
+- **AI Video Generation**: Turn lesson plans into professional educational videos
+- **Quick Production**: Create videos in minutes instead of hours
+- **Multiple Formats**: Generate videos for TikTok, Instagram Reels, YouTube Shorts, and more
+- **Educational Focus**: Perfect for creating tutorial videos, explainer content, and training materials
+
+**Use Case**: Generate a lesson plan on "Photosynthesis", then use VideoGen to create a visual video explanation that students can watch before or after class.
+
+### 🎙️ Convert Lesson Plans to Audio
+
+Transform your lesson plans into audio content using [ElevenLabs](https://elevenlabs.io/):
+
+- **AI Voice Generation**: Create natural-sounding voiceovers from your lesson content
+- **Multiple Voices**: Choose from 200+ AI voices in 50+ languages
+- **Audiobook Creation**: Convert entire lesson plans into audio format for accessibility
+- **Podcast Generation**: Turn lesson plans into podcast-style educational content
+
+**Use Case**: Generate a lesson plan, then use ElevenLabs to create an audio version for students who prefer listening, or for creating educational podcasts.
+
+### Integration Ideas
+
+- **Direct API Integration**: Connect VideoGen or ElevenLabs APIs to automatically convert generated lesson plans
+- **Export Formats**: Add export buttons that format lesson plans for these platforms
+- **Workflow Automation**: Create a complete pipeline: Generate → Convert to Video/Audio → Publish
+- **Multi-format Distribution**: Generate once, distribute as text, video, and audio
+
+**Note**: These integrations are optional and can be implemented as separate features or API endpoints. The referral links in the configuration are already set up to support these partnerships.
+
 ---
 
 Made with ❤️ for educators worldwide
