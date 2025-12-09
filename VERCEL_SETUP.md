@@ -60,21 +60,7 @@ Add these if you want to enable additional features:
 - **Value**: A strong password (12+ characters)
 - **Environment**: Production, Preview, Development
 - **Note**: Only needed if `ENABLE_ARCHIVE=true`
-
-#### `ELEVEN_LABS_PARTNER_REFERRAL_LINK` (Optional)
-
-- **Name**: `ELEVEN_LABS_PARTNER_REFERRAL_LINK`
-- **Value**: Your ElevenLabs referral link (e.g., `https://try.elevenlabs.io/cartooli`)
-- **Environment**: Production, Preview, Development
-- **Note**: Leave empty to disable
-
-#### `VIDEOGEN_PARTNER_REFFERAL_CODE` (Optional)
-
-- **Name**: `VIDEOGEN_PARTNER_REFFERAL_CODE`
-- **Value**: Your VideoGen referral code (e.g., `car70`)
-- **Environment**: Production, Preview, Development
-- **Note**: Leave empty to disable
-
+``
 #### `NODE_ENV` (Optional)
 
 - **Name**: `NODE_ENV`
@@ -103,8 +89,6 @@ Before deploying, ensure you have:
 - [ ] `ANTHROPIC_API_KEY` - Your Anthropic API key (REQUIRED)
 - [ ] `ENABLE_ARCHIVE` - Set to `false` or `true` (optional)
 - [ ] `ADMIN_PASSWORD` - Only if `ENABLE_ARCHIVE=true` (optional)
-- [ ] `ELEVEN_LABS_PARTNER_REFERRAL_LINK` - Your referral link (optional)
-- [ ] `VIDEOGEN_PARTNER_REFFERAL_CODE` - Your referral code (optional)
 - [ ] `NODE_ENV` - Set to `production` (optional, recommended)
 
 ## Quick Copy-Paste for Vercel Dashboard
@@ -121,8 +105,6 @@ ANTHROPIC_API_KEY = sk-ant-api03-YOUR_KEY_HERE
 ANTHROPIC_API_KEY = sk-ant-api03-YOUR_KEY_HERE
 ENABLE_ARCHIVE = false
 ADMIN_PASSWORD = your_secure_password_here
-ELEVEN_LABS_PARTNER_REFERRAL_LINK = https://try.elevenlabs.io/cartooli
-VIDEOGEN_PARTNER_REFFERAL_CODE = car70
 NODE_ENV = production
 ```
 
