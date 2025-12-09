@@ -1,4 +1,4 @@
-# Deployment Guide
+``# Deployment Guide
 
 This guide shows you how to deploy the AI Lesson Generator to the internet so others can use it.
 
@@ -153,7 +153,7 @@ Before deploying, make sure:
 **Step-by-Step:**
 
 1. **Sign up**
-   - Go to [railway.app](https://railway.app)
+   - Go to [railway.app](https://railway.com?referralCode=u38bdj)
    - Sign in with GitHub
 
 2. **New Project**
@@ -222,8 +222,6 @@ For all platforms, you need to set these environment variables:
 ### Optional
 - `ENABLE_ARCHIVE` - `true` or `false`
 - `ADMIN_PASSWORD` - If archive enabled
-- `ELEVEN_LABS_PARTNER_REFERRAL_LINK` - Optional
-- `VIDEOGEN_PARTNER_REFFERAL_CODE` - Optional
 - `NODE_ENV` - `production`
 
 **Important Notes:**
