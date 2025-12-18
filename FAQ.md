@@ -305,13 +305,14 @@ Consider:
 ## Still Have Questions?
 
 - 📖 Check the [documentation](README.md)
-- 🐛 [Report bugs](https://github.com/your-username/ai-lesson-generator/issues)
-- 💬 [Ask questions](https://github.com/your-username/ai-lesson-generator/discussions)
+- 🐛 [Report bugs](https://github.com/Cartooli/ai-lesson-plan-generator/issues)
+- 💬 [Ask questions](https://github.com/Cartooli/ai-lesson-plan-generator/discussions)
 - 🔒 [Security issues](SECURITY.md) - Report privately
 
 ---
 
 **Don't see your question?** Open a GitHub issue with the `question` label!
+
 
 
 

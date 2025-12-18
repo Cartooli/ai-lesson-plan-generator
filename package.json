@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/ai-lesson-generator.git"
+    "url": "https://github.com/Cartooli/ai-lesson-plan-generator.git"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -30,9 +30,6 @@
     "@anthropic-ai/sdk": "^0.20.0"
   },
   "devDependencies": {
-    "vercel": "^34.0.0"
+    "vercel": "^49.1.2"
   }
 }
-
-
-

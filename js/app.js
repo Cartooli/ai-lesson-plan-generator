@@ -174,7 +174,10 @@ lessonForm.addEventListener('submit', async (e) => {
 
   } catch (error) {
     // Handle network errors
-    console.error('Error:', error);
+    // Log error for debugging (only in development or for troubleshooting)
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      console.error('Error:', error);
+    }
     
     if (error.message.includes('Failed to fetch')) {
       showError('Unable to connect to the server. Please check your internet connection and ensure the server is running.');
@@ -195,6 +198,10 @@ document.getElementById('learningObjectives').addEventListener('keydown', (e) =>
     lessonForm.dispatchEvent(new Event('submit'));
   }
 });
+
+
+
+
 
 
 

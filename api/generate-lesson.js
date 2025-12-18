@@ -93,7 +93,9 @@ Make the lesson plan practical, engaging, and aligned with educational best prac
     if (process.env.ENABLE_ARCHIVE === 'true') {
       // Archive functionality would go here
       // For now, we'll just log (in production, save to file system or database)
-      console.log('Archive enabled - lesson would be saved here');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Archive enabled - lesson would be saved here');
+      }
     }
 
     // Return successful response

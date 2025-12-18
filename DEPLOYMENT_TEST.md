@@ -15,7 +15,7 @@ Before testing, ensure:
 
 ## Step 1: Verify Deployment Status
 
-1. Go to [Vercel Dashboard](https://vercel.com/dwellchecker/ai-lesson-plan-generator)
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard) and select your project
 2. Check **Deployments** tab:
    - [ ] Latest deployment shows "Ready" status
    - [ ] No build errors in logs
@@ -23,7 +23,7 @@ Before testing, ensure:
 
 ## Step 2: Test Frontend Access
 
-1. Visit your deployment URL: `https://ai-lesson-plan-generator-dwellchecker.vercel.app`
+1. Visit your deployment URL: `https://your-project-name.vercel.app`
 2. Check the page loads:
    - [ ] Page loads without errors
    - [ ] Form is visible and functional
@@ -46,7 +46,7 @@ Before testing, ensure:
 ### Option B: curl Command
 
 ```bash
-curl -X POST https://ai-lesson-plan-generator-dwellchecker.vercel.app/api/generate-lesson \
+curl -X POST https://your-project-name.vercel.app/api/generate-lesson \
   -H "Content-Type: application/json" \
   -d '{
     "topic": "Photosynthesis",
@@ -180,7 +180,7 @@ Your deployment is working if:
 
 ```bash
 # Test if deployment is accessible
-curl -I https://ai-lesson-plan-generator-dwellchecker.vercel.app
+curl -I https://your-project-name.vercel.app
 
 # Should return: HTTP/2 200
 ```
@@ -195,4 +195,7 @@ curl -I https://ai-lesson-plan-generator-dwellchecker.vercel.app
 ---
 
 **Last Updated**: After deployment verification
+
+
+
 

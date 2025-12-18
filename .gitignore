@@ -71,3 +71,12 @@ tmp/
 temp/
 *.tmp
 
+.vercel
+
+# Personal/Internal documentation (optional - for future use)
+*NOTES.md
+*notes.md
+*personal*.md
+*internal*.md
+TODO.md
+DEV_NOTES.md

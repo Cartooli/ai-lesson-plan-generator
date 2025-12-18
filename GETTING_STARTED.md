@@ -67,7 +67,7 @@ An API key is like a password that lets the app use Anthropic's AI service.
 1. Download [GitHub Desktop](https://desktop.github.com/)
 2. Install and sign in with your GitHub account
 3. Click "File" → "Clone Repository"
-4. Enter: `https://github.com/your-username/ai-lesson-generator.git`
+4. Enter: `https://github.com/Cartooli/ai-lesson-plan-generator.git`
 5. Choose where to save it on your computer
 6. Click "Clone"
 
@@ -80,7 +80,7 @@ An API key is like a password that lets the app use Anthropic's AI service.
    ```
 3. Copy the code:
    ```bash
-   git clone https://github.com/your-username/ai-lesson-generator.git
+   git clone https://github.com/Cartooli/ai-lesson-plan-generator.git
    ```
 4. Go into the folder:
    ```bash
@@ -244,6 +244,7 @@ git --version     # Should show a version number
 **Congratulations!** 🎉 You've set up your first AI application! 
 
 Need help? Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) or open an issue on GitHub.
+
 
 
 

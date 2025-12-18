@@ -16,7 +16,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/ai-lesson-generator.git
+git clone https://github.com/Cartooli/ai-lesson-plan-generator.git
 cd ai-lesson-generator
 ```
 
@@ -249,6 +249,7 @@ If you encounter issues:
 2. Search existing GitHub issues
 3. Open a new issue with details about your problem
 4. Include your environment details (OS, Node.js version, etc.)
+
 
 
 

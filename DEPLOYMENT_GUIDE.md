@@ -6,7 +6,7 @@ This guide shows you how to deploy the AI Lesson Generator to the internet so ot
 
 ### One-Click Deploy to Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/ai-lesson-generator)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Cartooli/ai-lesson-plan-generator)
 
 1. Click the button above (or [use this link](https://vercel.com/new))
 2. Sign in with GitHub
@@ -17,7 +17,7 @@ This guide shows you how to deploy the AI Lesson Generator to the internet so ot
 
 ### One-Click Deploy to Netlify
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/your-username/ai-lesson-generator)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Cartooli/ai-lesson-plan-generator)
 
 1. Click the button above
 2. Sign in with GitHub
@@ -429,6 +429,7 @@ If deployment fails:
 ---
 
 **Congratulations!** 🎉 Your AI Lesson Generator is now live on the internet!
+
 
 
 

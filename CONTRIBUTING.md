@@ -19,7 +19,7 @@ If you find a bug or have a feature request, please open an issue on GitHub. Whe
 
 1. **Fork the repository** and clone your fork
    ```bash
-   git clone https://github.com/your-username/ai-lesson-generator.git
+   git clone https://github.com/Cartooli/ai-lesson-plan-generator.git
    cd ai-lesson-generator
    ```
 
@@ -109,6 +109,7 @@ If you have questions about contributing, feel free to:
 - Check existing documentation in the repository
 
 Thank you for contributing to the AI Lesson Generator! 🎓
+
 
 
 
