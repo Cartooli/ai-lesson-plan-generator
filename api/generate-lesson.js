@@ -1,4 +1,28 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { rateLimit } from './_utils/rate-limit.js';
+
+// Validation constants
+const MAX_TOPIC_LENGTH = 200;
+const MAX_SUBJECT_LENGTH = 100;
+const MAX_OBJECTIVES_LENGTH = 2000;
+const MAX_DURATION = 480; // 8 hours max
+
+/**
+ * Sanitize input to prevent injection attacks
+ * @param {string} input - Input string to sanitize
+ * @param {number} maxLength - Maximum allowed length
+ * @returns {string} Sanitized input
+ */
+function sanitizeInput(input, maxLength = null) {
+  if (!input) return '';
+  let sanitized = String(input).trim();
+  if (maxLength) {
+    sanitized = sanitized.substring(0, maxLength);
+  }
+  // Remove potentially dangerous characters
+  sanitized = sanitized.replace(/[<>]/g, '');
+  return sanitized;
+}
 
 /**
  * AI Lesson Generator API Endpoint
@@ -10,9 +34,20 @@ import Anthropic from '@anthropic-ai/sdk';
  */
 export default async function handler(req, res) {
   // Handle CORS for browser requests
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // In production, restrict to specific origins for better security
+  const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : ['*'];
+  
+  const origin = req.headers.origin;
+  const corsOrigin = allowedOrigins.includes('*') || (origin && allowedOrigins.includes(origin))
+    ? origin || '*'
+    : allowedOrigins[0];
+  
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   // Handle preflight OPTIONS request
   if (req.method === 'OPTIONS') {
@@ -25,6 +60,25 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Rate limiting
+    const clientId = req.headers['x-forwarded-for']?.split(',')[0] || 
+                     req.headers['x-real-ip'] || 
+                     'unknown';
+    
+    const rateLimitResult = rateLimit(
+      clientId, 
+      parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '10', 10),
+      parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000', 10)
+    );
+    
+    if (!rateLimitResult.allowed) {
+      res.setHeader('Retry-After', rateLimitResult.retryAfter);
+      return res.status(429).json({ 
+        error: 'Too many requests. Please try again later.',
+        retryAfter: rateLimitResult.retryAfter
+      });
+    }
+
     // Get API key from environment
     const apiKey = process.env.ANTHROPIC_API_KEY;
     
@@ -34,12 +88,30 @@ export default async function handler(req, res) {
       });
     }
 
-    // Parse request body
+    // Parse and validate request body
     const { topic, grade, subject, duration, learningObjectives } = req.body;
     
-    // Validate required fields
-    if (!topic || !topic.trim()) {
-      return res.status(400).json({ error: 'Topic is required' });
+    // Validate and sanitize required fields
+    const sanitizedTopic = sanitizeInput(topic, MAX_TOPIC_LENGTH);
+    if (!sanitizedTopic) {
+      return res.status(400).json({ error: 'Topic is required and cannot be empty' });
+    }
+
+    // Sanitize optional fields
+    const sanitizedGrade = sanitizeInput(grade);
+    const sanitizedSubject = sanitizeInput(subject, MAX_SUBJECT_LENGTH);
+    const sanitizedObjectives = sanitizeInput(learningObjectives, MAX_OBJECTIVES_LENGTH);
+    
+    // Validate duration
+    let sanitizedDuration = null;
+    if (duration) {
+      const durationNum = parseInt(duration, 10);
+      if (isNaN(durationNum) || durationNum < 1 || durationNum > MAX_DURATION) {
+        return res.status(400).json({ 
+          error: `Duration must be between 1 and ${MAX_DURATION} minutes` 
+        });
+      }
+      sanitizedDuration = durationNum;
     }
 
     // Initialize Anthropic client
@@ -47,13 +119,13 @@ export default async function handler(req, res) {
       apiKey: apiKey,
     });
 
-    // Build the prompt for lesson plan generation
-    const gradeText = grade ? `for ${grade} grade` : '';
-    const subjectText = subject ? `in ${subject}` : '';
-    const durationText = duration ? `(${duration} minutes)` : '';
-    const objectivesText = learningObjectives ? `\n\nLearning Objectives:\n${learningObjectives}` : '';
+    // Build the prompt for lesson plan generation using sanitized inputs
+    const gradeText = sanitizedGrade ? `for ${sanitizedGrade} grade` : '';
+    const subjectText = sanitizedSubject ? `in ${sanitizedSubject}` : '';
+    const durationText = sanitizedDuration ? `(${sanitizedDuration} minutes)` : '';
+    const objectivesText = sanitizedObjectives ? `\n\nLearning Objectives:\n${sanitizedObjectives}` : '';
 
-    const prompt = `Create a comprehensive lesson plan ${gradeText} ${subjectText} ${durationText} on the topic: "${topic}"${objectivesText}
+    const prompt = `Create a comprehensive lesson plan ${gradeText} ${subjectText} ${durationText} on the topic: "${sanitizedTopic}"${objectivesText}
 
 Please structure the lesson plan with the following sections:
 1. Lesson Title
@@ -102,10 +174,10 @@ Make the lesson plan practical, engaging, and aligned with educational best prac
     return res.status(200).json({
       success: true,
       lessonPlan: lessonPlan,
-      topic: topic,
-      grade: grade || 'Not specified',
-      subject: subject || 'Not specified',
-      duration: duration || 'Not specified',
+      topic: sanitizedTopic,
+      grade: sanitizedGrade || 'Not specified',
+      subject: sanitizedSubject || 'Not specified',
+      duration: sanitizedDuration || 'Not specified',
       generatedAt: new Date().toISOString()
     });
 

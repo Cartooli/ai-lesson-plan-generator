@@ -55,8 +55,6 @@ notepad .env
 
 - `ENABLE_ARCHIVE` - Set to `true` to enable lesson archiving (default: `false`)
 - `ADMIN_PASSWORD` - Required if `ENABLE_ARCHIVE=true`, use a strong password
-- `ELEVEN_LABS_PARTNER_REFERRAL_LINK` - Optional affiliate link
-- `VIDEOGEN_PARTNER_REFFERAL_CODE` - Optional affiliate code
 - `NODE_ENV` - Set to `development` for detailed errors (default: `production`)
 
 ### 4. Run Local Development Server
@@ -98,14 +96,6 @@ Enable the lesson archiving and moderation system.
 
 Required when `ENABLE_ARCHIVE=true`. Use a strong password (12+ characters recommended) for the admin moderation panel.
 
-#### ELEVEN_LABS_PARTNER_REFERRAL_LINK
-
-Optional affiliate referral link for ElevenLabs. Leave empty to disable.
-
-#### VIDEOGEN_PARTNER_REFFERAL_CODE
-
-Optional affiliate referral code for VideoGen. Leave empty to disable.
-
 #### NODE_ENV
 
 Environment mode:
@@ -145,7 +135,6 @@ curl -X POST http://localhost:3000/api/generate-lesson \
 - [ ] Error handling works when API key is missing
 - [ ] Archive system works (if enabled)
 - [ ] Admin panel accessible (if archive enabled)
-- [ ] Referral links work (if configured)
 
 ## Deployment
 
@@ -168,8 +157,6 @@ curl -X POST http://localhost:3000/api/generate-lesson \
      - `ANTHROPIC_API_KEY`
      - `ENABLE_ARCHIVE` (if needed)
      - `ADMIN_PASSWORD` (if archive enabled)
-     - `ELEVEN_LABS_PARTNER_REFERRAL_LINK` (optional)
-     - `VIDEOGEN_PARTNER_REFFERAL_CODE` (optional)
      - `NODE_ENV` (optional)
 
 4. **Redeploy** after adding environment variables

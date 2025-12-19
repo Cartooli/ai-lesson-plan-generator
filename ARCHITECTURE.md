@@ -9,7 +9,7 @@ The AI Lesson Generator is a web application that uses AI to generate educationa
 - **Frontend**: HTML/JavaScript client interface
 - **Backend**: Serverless API functions
 - **AI Integration**: Anthropic Claude API for lesson generation
-- **Optional Features**: Archive system, referral links
+- **Optional Features**: Archive system
 
 ## Architecture Diagram
 
@@ -28,7 +28,6 @@ The AI Lesson Generator is a web application that uses AI to generate educationa
 │  ┌──────────────────────────┐  │
 │  │  API Endpoints           │  │
 │  │  - generate-lesson.js    │  │
-│  │  - get-referral-*.js     │  │
 │  └──────────┬───────────────┘  │
 └─────────────┼──────────────────┘
               │
@@ -70,14 +69,6 @@ The AI Lesson Generator is a web application that uses AI to generate educationa
    - Returns formatted lesson plan
    - Handles errors gracefully
 
-2. **get-elevenlabs-referral.js**
-   - Returns ElevenLabs referral link (if configured)
-   - Optional affiliate functionality
-
-3. **get-videogen-referral.js**
-   - Returns VideoGen referral code (if configured)
-   - Optional affiliate functionality
-
 **Characteristics**:
 - Serverless functions
 - Stateless design
@@ -115,18 +106,6 @@ The AI Lesson Generator is a web application that uses AI to generate educationa
 
 **Location**: `lessons-archive/` directory (gitignored)
 
-#### Referral Links
-
-**Purpose**: Optional affiliate/referral functionality
-
-**Components**:
-- ElevenLabs referral handler
-- VideoGen referral handler
-
-**Configuration**:
-- Optional environment variables
-- Can be disabled by leaving empty
-
 ## Data Flow
 
 ### Lesson Generation Flow
@@ -161,8 +140,6 @@ The AI Lesson Generator is a web application that uses AI to generate educationa
 
 - `ENABLE_ARCHIVE`: Enable/disable archive system
 - `ADMIN_PASSWORD`: Password for admin panel
-- `ELEVEN_LABS_PARTNER_REFERRAL_LINK`: ElevenLabs referral
-- `VIDEOGEN_PARTNER_REFFERAL_CODE`: VideoGen referral
 - `NODE_ENV`: Environment mode (development/production)
 
 ## Security Considerations
@@ -301,6 +278,7 @@ For questions about architecture or to propose improvements:
 - Open a GitHub issue
 - Check [CONTRIBUTING.md](CONTRIBUTING.md)
 - Review [SETUP.md](SETUP.md) for development setup
+
 
 
 

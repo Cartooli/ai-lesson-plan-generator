@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const referralCode = process.env.VIDEOGEN_PARTNER_REFFERAL_CODE;
+    const referralCode = process.env.VIDEOGEN_PARTNER_REFERRAL_CODE;
 
     if (!referralCode || referralCode.trim() === '') {
       return res.status(200).json({ 

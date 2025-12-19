@@ -17,7 +17,6 @@ An AI-powered tool for generating comprehensive educational lesson plans using A
 - 📚 **Comprehensive Content**: Create structured lessons with objectives, activities, and assessments
 - 🎯 **Customizable**: Tailor lessons to specific topics, grade levels, and learning objectives
 - 📦 **Optional Archive System**: Store and moderate generated lesson plans
-- 🔗 **Partner Integrations**: Optional referral links for educational tools
 - 🚀 **Easy Deployment**: Deploy to Vercel, Netlify, or other serverless platforms
 
 ## Quick Start
@@ -31,7 +30,7 @@ An AI-powered tool for generating comprehensive educational lesson plans using A
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Cartooli/ai-lesson-plan-generator.git
-   cd ai-lesson-generator
+   cd ai-lesson-plan-generator
    ```
 
 2. **Install dependencies**
@@ -74,8 +73,6 @@ For detailed setup instructions, see [SETUP.md](SETUP.md).
 
 - `ENABLE_ARCHIVE` - Enable lesson archiving system (default: `false`)
 - `ADMIN_PASSWORD` - Admin password for moderation panel (required if `ENABLE_ARCHIVE=true`)
-- `ELEVEN_LABS_PARTNER_REFERRAL_LINK` - Optional ElevenLabs referral link
-- `VIDEOGEN_PARTNER_REFFERAL_CODE` - Optional VideoGen referral code
 - `NODE_ENV` - Environment mode: `development` or `production` (default: `production`)
 
 See [.env.example](.env.example) for a complete template with descriptions.
@@ -149,14 +146,6 @@ When enabled, the archive system allows you to:
 
 **Security Note**: Use a strong password for the admin panel if enabling this feature.
 
-### Partner Referrals (Optional)
-
-Optional affiliate/referral links for:
-- **ElevenLabs**: Text-to-speech and voice generation
-- **VideoGen**: Video generation tools
-
-These can be disabled by leaving the environment variables empty.
-
 ## Development
 
 ### Project Structure
@@ -191,7 +180,6 @@ npm run dev
 - Test lesson generation with valid API key
 - Verify error handling with missing/invalid keys
 - Test archive system (if enabled)
-- Verify referral links (if configured)
 
 ## Contributing
 
@@ -236,41 +224,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Integration with LMS platforms
 - [ ] User authentication system
 - [ ] Lesson plan sharing
-
-## Extension Ideas
-
-Enhance your lesson plans with these powerful integrations:
-
-### 🎥 Convert Lesson Plans to Video
-
-Transform your generated lesson plans into engaging video content using [VideoGen](https://videogen.io?fpr=car70):
-
-- **AI Video Generation**: Turn lesson plans into professional educational videos
-- **Quick Production**: Create videos in minutes instead of hours
-- **Multiple Formats**: Generate videos for TikTok, Instagram Reels, YouTube Shorts, and more
-- **Educational Focus**: Perfect for creating tutorial videos, explainer content, and training materials
-
-**Use Case**: Generate a lesson plan on "Photosynthesis", then use VideoGen to create a visual video explanation that students can watch before or after class.
-
-### 🎙️ Convert Lesson Plans to Audio
-
-Transform your lesson plans into audio content using [ElevenLabs](https://try.elevenlabs.io/cartooli):
-
-- **AI Voice Generation**: Create natural-sounding voiceovers from your lesson content
-- **Multiple Voices**: Choose from 200+ AI voices in 50+ languages
-- **Audiobook Creation**: Convert entire lesson plans into audio format for accessibility
-- **Podcast Generation**: Turn lesson plans into podcast-style educational content
-
-**Use Case**: Generate a lesson plan, then use ElevenLabs to create an audio version for students who prefer listening, or for creating educational podcasts.
-
-### Integration Ideas
-
-- **Direct API Integration**: Connect VideoGen or ElevenLabs APIs to automatically convert generated lesson plans
-- **Export Formats**: Add export buttons that format lesson plans for these platforms
-- **Workflow Automation**: Create a complete pipeline: Generate → Convert to Video/Audio → Publish
-- **Multi-format Distribution**: Generate once, distribute as text, video, and audio
-
-**Note**: These integrations are optional and can be implemented as separate features or API endpoints. The referral links in the configuration are already set up to support these partnerships.
 
 ---
 

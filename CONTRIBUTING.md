@@ -86,8 +86,6 @@ ai-lesson-generator/
 ### Key Files
 
 - `api/generate-lesson.js` - Main lesson generation endpoint
-- `api/get-elevenlabs-referral.js` - ElevenLabs referral handler
-- `api/get-videogen-referral.js` - VideoGen referral handler
 - `README.md` - Main project documentation
 - `SETUP.md` - Detailed setup instructions
 
