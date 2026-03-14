@@ -180,9 +180,9 @@ lessonForm.addEventListener('submit', async (e) => {
     }
     
     if (error.message.includes('Failed to fetch')) {
-      showError('Unable to connect to the server. Please check your internet connection and ensure the server is running.');
+      showError('Unable to connect to the server. Please check your internet connection and try again.');
     } else {
-      showError(`An error occurred: ${error.message}`);
+      showError('Something went wrong while generating your lesson plan. Please try again.');
     }
   } finally {
     setLoading(false);
