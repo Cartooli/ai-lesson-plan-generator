@@ -1,6 +1,6 @@
 /**
  * AI Lesson Generator - Frontend JavaScript
- * 
+ *
  * Handles form submission, API calls, and UI updates
  */
 
@@ -14,6 +14,15 @@ const lessonPlanContainer = document.getElementById('lessonPlanContainer');
 const lessonPlan = document.getElementById('lessonPlan');
 const copyBtn = document.getElementById('copyBtn');
 
+// Configure marked for safe rendering
+marked.setOptions({
+  breaks: true,
+  gfm: true
+});
+
+// Request timeout in milliseconds
+const FETCH_TIMEOUT_MS = 60000;
+
 /**
  * Show error message to user
  */
@@ -21,7 +30,7 @@ function showError(message) {
   errorMessage.textContent = message;
   errorMessage.style.display = 'block';
   lessonPlanContainer.style.display = 'none';
-  
+
   // Scroll to error
   errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -37,56 +46,22 @@ function hideError() {
  * Show loading state
  */
 function setLoading(isLoading) {
-  if (isLoading) {
-    generateBtn.disabled = true;
-    btnText.style.display = 'none';
-    btnLoader.style.display = 'inline';
-    generateBtn.textContent = 'Generating...';
-  } else {
-    generateBtn.disabled = false;
-    btnText.style.display = 'inline';
-    btnLoader.style.display = 'none';
-    generateBtn.innerHTML = '<span class="btn-text">Generate Lesson Plan</span><span class="btn-loader" style="display: none;">⏳</span>';
-  }
-}
-
-/**
- * Format lesson plan text for display
- */
-function formatLessonPlan(text) {
-  // Convert markdown-style formatting to HTML
-  let formatted = text
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Lists
-    .replace(/^\d+\.\s+(.*$)/gim, '<li>$1</li>')
-    .replace(/^[-*]\s+(.*$)/gim, '<li>$1</li>')
-    // Line breaks
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>');
-
-  // Wrap in paragraphs
-  formatted = '<p>' + formatted + '</p>';
-
-  // Wrap list items in ul tags
-  formatted = formatted.replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>');
-
-  return formatted;
+  generateBtn.disabled = isLoading;
+  btnText.style.display = isLoading ? 'none' : 'inline';
+  btnLoader.style.display = isLoading ? 'inline' : 'none';
 }
 
 /**
  * Display the generated lesson plan
  */
 function displayLessonPlan(lessonPlanData) {
-  const formattedPlan = formatLessonPlan(lessonPlanData.lessonPlan);
-  lessonPlan.innerHTML = formattedPlan;
+  // Convert markdown to HTML with marked, then sanitize with DOMPurify
+  const rawHtml = marked.parse(lessonPlanData.lessonPlan);
+  const safeHtml = DOMPurify.sanitize(rawHtml);
+  lessonPlan.innerHTML = safeHtml;
   lessonPlanContainer.style.display = 'block';
   hideError();
-  
+
   // Scroll to lesson plan
   lessonPlanContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -96,15 +71,15 @@ function displayLessonPlan(lessonPlanData) {
  */
 async function copyToClipboard() {
   const text = lessonPlan.innerText || lessonPlan.textContent;
-  
+
   try {
     await navigator.clipboard.writeText(text);
-    
+
     // Show feedback
     const originalText = copyBtn.textContent;
     copyBtn.textContent = '✓ Copied!';
     copyBtn.style.backgroundColor = '#28a745';
-    
+
     setTimeout(() => {
       copyBtn.textContent = originalText;
       copyBtn.style.backgroundColor = '';
@@ -138,27 +113,25 @@ lessonForm.addEventListener('submit', async (e) => {
     return;
   }
 
-  try {
-    // Determine API endpoint
-    // In production, this would be your deployed URL
-    // For local development with Vercel, use the local server
-    const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? '/api/generate-lesson'
-      : '/api/generate-lesson';
+  // Set up request timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-    // Make API request
-    const response = await fetch(apiUrl, {
+  try {
+    const response = await fetch('/api/generate-lesson', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     const data = await response.json();
 
     if (!response.ok) {
-      // Handle API errors
       const errorMsg = data.error || `Server error: ${response.status}`;
       showError(errorMsg);
       setLoading(false);
@@ -173,13 +146,11 @@ lessonForm.addEventListener('submit', async (e) => {
     }
 
   } catch (error) {
-    // Handle network errors
-    // Log error for debugging (only in development or for troubleshooting)
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      console.error('Error:', error);
-    }
-    
-    if (error.message.includes('Failed to fetch')) {
+    clearTimeout(timeoutId);
+
+    if (error.name === 'AbortError') {
+      showError('Request timed out. The server took too long to respond. Please try again.');
+    } else if (error.message.includes('Failed to fetch')) {
       showError('Unable to connect to the server. Please check your internet connection and try again.');
     } else {
       showError('Something went wrong while generating your lesson plan. Please try again.');
@@ -192,16 +163,9 @@ lessonForm.addEventListener('submit', async (e) => {
 // Copy button handler
 copyBtn.addEventListener('click', copyToClipboard);
 
-// Allow Enter key in textarea (but submit on form)
+// Allow Ctrl+Enter in textarea to submit
 document.getElementById('learningObjectives').addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && e.ctrlKey) {
     lessonForm.dispatchEvent(new Event('submit'));
   }
 });
-
-
-
-
-
-
-

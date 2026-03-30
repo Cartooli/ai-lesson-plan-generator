@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { rateLimit } from './_utils/rate-limit.js';
+import { setCorsHeaders } from './_utils/cors.js';
 
 // Validation constants
 const MAX_TOPIC_LENGTH = 200;
@@ -7,8 +8,10 @@ const MAX_SUBJECT_LENGTH = 100;
 const MAX_OBJECTIVES_LENGTH = 2000;
 const MAX_DURATION = 480; // 8 hours max
 
+const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+
 /**
- * Sanitize input to prevent injection attacks
+ * Sanitize input by encoding HTML entities to preserve content safely.
  * @param {string} input - Input string to sanitize
  * @param {number} maxLength - Maximum allowed length
  * @returns {string} Sanitized input
@@ -19,35 +22,26 @@ function sanitizeInput(input, maxLength = null) {
   if (maxLength) {
     sanitized = sanitized.substring(0, maxLength);
   }
-  // Remove potentially dangerous characters
-  sanitized = sanitized.replace(/[<>]/g, '');
+  // Encode HTML entities instead of stripping characters
+  sanitized = sanitized
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
   return sanitized;
 }
 
 /**
  * AI Lesson Generator API Endpoint
- * 
+ *
  * Generates comprehensive lesson plans using Anthropic's Claude API
- * 
+ *
  * @param {Object} req - HTTP request object
  * @param {Object} res - HTTP response object
  */
 export default async function handler(req, res) {
-  // Handle CORS for browser requests
-  // In production, restrict to specific origins for better security
-  const allowedOrigins = process.env.ALLOWED_ORIGINS 
-    ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['*'];
-  
-  const origin = req.headers.origin;
-  const corsOrigin = allowedOrigins.includes('*') || (origin && allowedOrigins.includes(origin))
-    ? origin || '*'
-    : allowedOrigins[0];
-  
-  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  setCorsHeaders(req, res);
 
   // Handle preflight OPTIONS request
   if (req.method === 'OPTIONS') {
@@ -61,57 +55,55 @@ export default async function handler(req, res) {
 
   try {
     // Rate limiting
-    const clientId = req.headers['x-forwarded-for']?.split(',')[0] || 
-                     req.headers['x-real-ip'] || 
+    const clientId = req.headers['x-forwarded-for']?.split(',')[0] ||
+                     req.headers['x-real-ip'] ||
                      'unknown';
-    
+
     const rateLimitResult = rateLimit(
-      clientId, 
+      clientId,
       parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '10', 10),
       parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000', 10)
     );
-    
+
     if (!rateLimitResult.allowed) {
       res.setHeader('Retry-After', rateLimitResult.retryAfter);
-      return res.status(429).json({ 
+      return res.status(429).json({
         error: 'Too many requests. Please try again later.',
         retryAfter: rateLimitResult.retryAfter
       });
     }
 
-    // Get API key from environment
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    
-    if (!apiKey) {
-      return res.status(500).json({ 
-        error: 'API key not configured. Please set ANTHROPIC_API_KEY in your environment variables.' 
-      });
-    }
-
-    // Parse and validate request body
+    // Parse and validate request body before checking API key,
+    // so users get actionable validation errors first.
     const { topic, grade, subject, duration, learningObjectives } = req.body;
-    
-    // Validate and sanitize required fields
+
     const sanitizedTopic = sanitizeInput(topic, MAX_TOPIC_LENGTH);
     if (!sanitizedTopic) {
       return res.status(400).json({ error: 'Topic is required and cannot be empty' });
     }
 
-    // Sanitize optional fields
     const sanitizedGrade = sanitizeInput(grade);
     const sanitizedSubject = sanitizeInput(subject, MAX_SUBJECT_LENGTH);
     const sanitizedObjectives = sanitizeInput(learningObjectives, MAX_OBJECTIVES_LENGTH);
-    
-    // Validate duration
+
     let sanitizedDuration = null;
     if (duration) {
       const durationNum = parseInt(duration, 10);
       if (isNaN(durationNum) || durationNum < 1 || durationNum > MAX_DURATION) {
-        return res.status(400).json({ 
-          error: `Duration must be between 1 and ${MAX_DURATION} minutes` 
+        return res.status(400).json({
+          error: `Duration must be between 1 and ${MAX_DURATION} minutes`
         });
       }
       sanitizedDuration = durationNum;
+    }
+
+    // Get API key from environment
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({
+        error: 'API key not configured. Please set ANTHROPIC_API_KEY in your environment variables.'
+      });
     }
 
     // Initialize Anthropic client
@@ -146,9 +138,10 @@ Please structure the lesson plan with the following sections:
 
 Make the lesson plan practical, engaging, and aligned with educational best practices. Use clear, actionable language.`;
 
-    // Call Anthropic API
+    // Call Anthropic API with configurable model
+    const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL;
     const message = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
+      model,
       max_tokens: 4096,
       messages: [
         {
@@ -160,15 +153,6 @@ Make the lesson plan practical, engaging, and aligned with educational best prac
 
     // Extract the lesson plan from the response
     const lessonPlan = message.content[0].text;
-
-    // Optional: Save to archive if enabled
-    if (process.env.ENABLE_ARCHIVE === 'true') {
-      // Archive functionality would go here
-      // For now, we'll just log (in production, save to file system or database)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Archive enabled - lesson would be saved here');
-      }
-    }
 
     // Return successful response
     return res.status(200).json({
@@ -185,22 +169,25 @@ Make the lesson plan practical, engaging, and aligned with educational best prac
     // Log error for debugging (but don't expose sensitive info)
     console.error('Error generating lesson plan:', error.message);
 
-    // Return user-friendly error message
     let errorMessage = 'Failed to generate lesson plan.';
     let statusCode = 500;
 
-    if (error.message.includes('401') || error.message.includes('authentication')) {
+    // Use structured error properties from the Anthropic SDK
+    if (error.status === 401) {
       errorMessage = 'Invalid API key. Please check your ANTHROPIC_API_KEY.';
       statusCode = 401;
-    } else if (error.message.includes('429') || error.message.includes('rate limit')) {
+    } else if (error.status === 429) {
       errorMessage = 'Rate limit exceeded. Please try again in a few moments.';
       statusCode = 429;
-    } else if (error.message.includes('quota') || error.message.includes('billing')) {
-      errorMessage = 'API quota exceeded. Please check your Anthropic account.';
-      statusCode = 402;
+    } else if (error.status === 402 || error.status === 403) {
+      errorMessage = 'API quota exceeded or access denied. Please check your Anthropic account.';
+      statusCode = error.status;
+    } else if (error.status >= 400 && error.status < 500) {
+      errorMessage = 'Invalid request to AI service. Please try again.';
+      statusCode = error.status;
     }
 
-    return res.status(statusCode).json({ 
+    return res.status(statusCode).json({
       error: errorMessage,
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });

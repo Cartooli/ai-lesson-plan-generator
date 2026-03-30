@@ -1,6 +1,11 @@
 /**
  * Simple in-memory rate limiter
- * For production, consider using Redis/Upstash for distributed deployments
+ *
+ * NOTE: In serverless environments (Vercel, AWS Lambda, etc.), each function
+ * invocation may run in a separate container with its own memory. This means
+ * the in-memory store is NOT shared across instances and rate limiting is
+ * best-effort only. For strict enforcement, use a shared store like
+ * Redis / Upstash / Vercel KV.
  */
 
 const rateLimitStore = new Map();
@@ -15,7 +20,7 @@ const rateLimitStore = new Map();
 export function rateLimit(identifier, maxRequests = 10, windowMs = 60000) {
   const now = Date.now();
   const key = identifier;
-  
+
   if (!rateLimitStore.has(key)) {
     rateLimitStore.set(key, {
       count: 1,
@@ -23,9 +28,9 @@ export function rateLimit(identifier, maxRequests = 10, windowMs = 60000) {
     });
     return { allowed: true, remaining: maxRequests - 1, resetTime: now + windowMs };
   }
-  
+
   const record = rateLimitStore.get(key);
-  
+
   // Reset if window expired
   if (now > record.resetTime) {
     record.count = 1;
@@ -33,25 +38,25 @@ export function rateLimit(identifier, maxRequests = 10, windowMs = 60000) {
     rateLimitStore.set(key, record);
     return { allowed: true, remaining: maxRequests - 1, resetTime: record.resetTime };
   }
-  
+
   // Check if limit exceeded
   if (record.count >= maxRequests) {
-    return { 
-      allowed: false, 
-      remaining: 0, 
+    return {
+      allowed: false,
+      remaining: 0,
       resetTime: record.resetTime,
       retryAfter: Math.ceil((record.resetTime - now) / 1000)
     };
   }
-  
+
   // Increment count
   record.count++;
   rateLimitStore.set(key, record);
-  
-  return { 
-    allowed: true, 
-    remaining: maxRequests - record.count, 
-    resetTime: record.resetTime 
+
+  return {
+    allowed: true,
+    remaining: maxRequests - record.count,
+    resetTime: record.resetTime
   };
 }
 
@@ -67,8 +72,9 @@ export function cleanupRateLimitStore() {
   }
 }
 
-// Cleanup every 5 minutes
+// Cleanup every 5 minutes (only runs within a long-lived container).
+// unref() allows the process to exit naturally if this is the only timer.
 if (typeof setInterval !== 'undefined') {
-  setInterval(cleanupRateLimitStore, 5 * 60 * 1000);
+  const cleanupTimer = setInterval(cleanupRateLimitStore, 5 * 60 * 1000);
+  if (cleanupTimer.unref) cleanupTimer.unref();
 }
-

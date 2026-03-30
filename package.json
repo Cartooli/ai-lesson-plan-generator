@@ -2,12 +2,14 @@
   "name": "ai-lesson-generator",
   "version": "1.0.0",
   "description": "AI-powered tool for generating comprehensive educational lesson plans",
+  "type": "module",
   "main": "index.html",
   "scripts": {
     "dev": "vercel dev",
     "build": "echo 'No build step required'",
     "start": "vercel dev",
-    "lint": "echo 'No linter configured'"
+    "lint": "echo 'No linter configured'",
+    "test": "node --test 'tests/*.test.js'"
   },
   "keywords": [
     "education",
