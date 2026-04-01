@@ -14,11 +14,21 @@ const lessonPlanContainer = document.getElementById('lessonPlanContainer');
 const lessonPlan = document.getElementById('lessonPlan');
 const copyBtn = document.getElementById('copyBtn');
 
+// Check that CDN dependencies loaded
+if (typeof marked === 'undefined' || typeof DOMPurify === 'undefined') {
+  document.getElementById('errorMessage').textContent =
+    'Required libraries failed to load. Please check your internet connection and reload.';
+  document.getElementById('errorMessage').style.display = 'block';
+  document.getElementById('generateBtn').disabled = true;
+}
+
 // Configure marked for safe rendering
-marked.setOptions({
-  breaks: true,
-  gfm: true
-});
+if (typeof marked !== 'undefined') {
+  marked.setOptions({
+    breaks: true,
+    gfm: true
+  });
+}
 
 // Request timeout in milliseconds
 const FETCH_TIMEOUT_MS = 60000;
@@ -78,7 +88,7 @@ async function copyToClipboard() {
     // Show feedback
     const originalText = copyBtn.textContent;
     copyBtn.textContent = '✓ Copied!';
-    copyBtn.style.backgroundColor = '#28a745';
+    copyBtn.style.backgroundColor = 'var(--success-color)';
 
     setTimeout(() => {
       copyBtn.textContent = originalText;
@@ -129,7 +139,14 @@ lessonForm.addEventListener('submit', async (e) => {
 
     clearTimeout(timeoutId);
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      showError(`Server error (${response.status}). Please try again.`);
+      setLoading(false);
+      return;
+    }
 
     if (!response.ok) {
       const errorMsg = data.error || `Server error: ${response.status}`;
@@ -166,6 +183,6 @@ copyBtn.addEventListener('click', copyToClipboard);
 // Allow Ctrl+Enter in textarea to submit
 document.getElementById('learningObjectives').addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && e.ctrlKey) {
-    lessonForm.dispatchEvent(new Event('submit'));
+    lessonForm.requestSubmit();
   }
 });

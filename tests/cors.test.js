@@ -52,6 +52,20 @@ describe('setCorsHeaders', () => {
     setCorsHeaders(mockReq('http://example.com'), res);
     assert.ok(res._headers['Access-Control-Allow-Methods']);
     assert.ok(res._headers['Access-Control-Allow-Headers']);
-    assert.ok(res._headers['Access-Control-Allow-Credentials']);
+  });
+
+  it('omits credentials header with wildcard origin', () => {
+    delete process.env.ALLOWED_ORIGINS;
+    const res = mockRes();
+    setCorsHeaders(mockReq(undefined), res);
+    assert.equal(res._headers['Access-Control-Allow-Origin'], '*');
+    assert.equal(res._headers['Access-Control-Allow-Credentials'], undefined);
+  });
+
+  it('sets credentials header with specific origins', () => {
+    process.env.ALLOWED_ORIGINS = 'http://example.com';
+    const res = mockRes();
+    setCorsHeaders(mockReq('http://example.com'), res);
+    assert.equal(res._headers['Access-Control-Allow-Credentials'], 'true');
   });
 });

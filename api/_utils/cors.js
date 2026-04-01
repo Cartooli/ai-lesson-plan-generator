@@ -16,5 +16,7 @@ export function setCorsHeaders(req, res) {
   res.setHeader('Access-Control-Allow-Origin', corsOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  if (corsOrigin !== '*') {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
 }
