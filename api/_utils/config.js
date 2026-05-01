@@ -13,10 +13,15 @@ function parsePositiveInt(value, fallback) {
 }
 
 export function getModelConfig() {
-  return {
+  const cfg = {
     model: process.env.ANTHROPIC_MODEL || DEFAULT_MODEL,
     maxTokens: parsePositiveInt(process.env.ANTHROPIC_MAX_TOKENS, DEFAULT_MAX_TOKENS),
   };
+  if (process.env.ANTHROPIC_TEMPERATURE !== undefined) {
+    const t = parseFloat(process.env.ANTHROPIC_TEMPERATURE);
+    if (Number.isFinite(t) && t >= 0 && t <= 1) cfg.temperature = t;
+  }
+  return cfg;
 }
 
 export function getRateLimitConfig() {

@@ -4,7 +4,35 @@
  * Keeping prompts in a dedicated module (rather than inline string literals
  * in the handler) makes them reviewable as data, easier to version, and
  * trivially swappable.
+ *
+ * Bump LESSON_PROMPT_VERSION whenever the template's behavior changes; the
+ * version flows into structured logs so we can correlate output drift to
+ * specific prompt revisions.
  */
+
+export const LESSON_PROMPT_VERSION = '2026-05-01.1';
+
+const REQUIRED_SECTIONS = [
+  'Lesson Title',
+  'Grade Level',
+  'Subject',
+  'Duration',
+  'Learning Objectives',
+  'Materials Needed',
+  'Lesson Introduction',
+  'Main Content',
+  'Guided Practice',
+  'Independent Practice',
+  'Assessment/Evaluation',
+  'Closure/Summary',
+  'Extension Activities',
+  'Differentiation Strategies',
+  'Homework/Follow-up',
+];
+
+export function getRequiredSections() {
+  return [...REQUIRED_SECTIONS];
+}
 
 export function buildLessonPlanPrompt({ topic, grade, subject, duration, learningObjectives }) {
   const gradeText = grade ? `for ${grade} grade` : '';

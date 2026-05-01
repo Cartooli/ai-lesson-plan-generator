@@ -1,7 +1,7 @@
 import { rateLimit } from './_utils/rate-limit.js';
 import { setCorsHeaders } from './_utils/cors.js';
 import { generateText, classifyError } from './_utils/anthropic-client.js';
-import { buildLessonPlanPrompt } from './_utils/prompts.js';
+import { buildLessonPlanPrompt, LESSON_PROMPT_VERSION } from './_utils/prompts.js';
 import { getRateLimitConfig } from './_utils/config.js';
 
 // Validation constants
@@ -88,16 +88,20 @@ export default async function handler(req, res) {
     });
 
     const start = Date.now();
-    const { text: lessonPlan, model } = await generateText(prompt);
+    const { text: lessonPlan, model, usage, stopReason } = await generateText(prompt);
     const latencyMs = Date.now() - start;
 
     if (process.env.NODE_ENV === 'development') {
       console.log(JSON.stringify({
         event: 'lesson_generated',
         model,
+        promptVersion: LESSON_PROMPT_VERSION,
         latencyMs,
         topicLength: sanitizedTopic.length,
         outputLength: lessonPlan.length,
+        stopReason,
+        inputTokens: usage?.input_tokens ?? null,
+        outputTokens: usage?.output_tokens ?? null,
       }));
     }
 
