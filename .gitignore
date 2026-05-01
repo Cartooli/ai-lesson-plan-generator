@@ -80,3 +80,4 @@ temp/
 *internal*.md
 TODO.md
 DEV_NOTES.md
+.claude/scheduled_tasks.lock

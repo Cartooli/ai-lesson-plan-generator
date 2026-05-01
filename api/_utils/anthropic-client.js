@@ -1,6 +1,9 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { getModelConfig } from './config.js';
 
+const DEFAULT_TEMPERATURE = 0.7;
+const DEFAULT_MAX_RETRIES = 2;
+
 let cachedClient = null;
 
 function getClient() {
@@ -11,7 +14,10 @@ function getClient() {
       err.code = 'MISSING_API_KEY';
       throw err;
     }
-    cachedClient = new Anthropic({ apiKey });
+    cachedClient = new Anthropic({
+      apiKey,
+      maxRetries: DEFAULT_MAX_RETRIES,
+    });
   }
   return cachedClient;
 }
@@ -20,7 +26,7 @@ function getClient() {
  * Defensively extract text from a Claude messages response.
  * Returns the concatenated text of all `text` blocks, or '' if none.
  */
-function extractText(message) {
+export function extractText(message) {
   if (!message || !Array.isArray(message.content)) return '';
   return message.content
     .filter((block) => block && block.type === 'text' && typeof block.text === 'string')
@@ -34,12 +40,13 @@ function extractText(message) {
  * model, provider, or response shape touches one file instead of every handler.
  */
 export async function generateText(prompt, overrides = {}) {
-  const { model, maxTokens } = { ...getModelConfig(), ...overrides };
+  const { model, maxTokens, temperature = DEFAULT_TEMPERATURE } = { ...getModelConfig(), ...overrides };
   const client = getClient();
 
   const message = await client.messages.create({
     model,
     max_tokens: maxTokens,
+    temperature,
     messages: [{ role: 'user', content: prompt }],
   });
 
@@ -50,7 +57,12 @@ export async function generateText(prompt, overrides = {}) {
     throw err;
   }
 
-  return { text, model, stopReason: message.stop_reason };
+  return {
+    text,
+    model,
+    stopReason: message.stop_reason,
+    usage: message.usage || null,
+  };
 }
 
 /**
